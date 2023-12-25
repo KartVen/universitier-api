@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <changeSet id="0001-1" author="kartven">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_account_expired" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_account_locked" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_credentials_expired" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_enabled" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="staffs">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_staffs"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_students_user" references="users(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="students">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_students"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_students_user" references="users(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="faculties">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_faculties"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shortname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="courses">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_courses"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="faculty_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_courses_faculty" references="faculties(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="academic_years">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_academic_years"/>
+            </column>
+            <column name="semesters" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="academic_year" type="VARCHAR(9)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="student_courses">
+            <column name="course_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_stucou_on_course" references="courses(id)"/>
+            </column>
+            <column name="student_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_stucou_on_student" references="students(id)"/>
+            </column>
+            <column name="academic_year_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_stucou_on_academic_year" references="academic_years(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="course_academic_years">
+            <column name="course_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_couacy_on_course" references="courses(id)"/>
+            </column>
+            <column name="academic_year_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_couacy_on_academic_year" references="academic_years(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="programmes">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_programmes"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="course_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_programmes_course" references="courses(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="programme_academic_years">
+            <column name="programme_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_proacy_on_programme" references="programmes(id)"/>
+            </column>
+            <column name="academic_year_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_proacy_on_academic_year" references="academic_years(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="modules">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_modules"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ects" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hours" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_exam" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="programme_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_modules_programme" references="programmes(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="module_academic_years">
+            <column name="module_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_modacy_on_module" references="modules(id)"/>
+            </column>
+            <column name="academic_year_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_modacy_on_academic_year" references="academic_years(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="groups">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_groups"/>
+            </column>
+            <column name="number" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="class_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="module_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_groups_module" references="modules(id)"/>
+            </column>
+            <column name="academic_year_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_groups_academic_year" references="academic_years(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="student_groups">
+            <column name="group_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_stugro_on_group" references="groups(id)"/>
+            </column>
+            <column name="student_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_stugro_on_student" references="students(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="0001-2" author="KartVen" context="test">
+        <sql>
+            insert into users (id, email, password, is_account_expired, is_account_locked, is_credentials_expired, is_enabled, role)
+            values  (1, 'uniadmin@universitier.edu.pl', '$2a$10$a5wjVBv86wSDWJQ1Tc7koONYtqeRL3/KK9.IH3AyHG55ijln6cqjW', false, false, false, true, 'ADMINISTRATOR'),
+                    (2, 'jkowalski@universitier.edu.pl', '$2a$10$8nBQBzfKnJ70PQWH33q4BeS0CuOo1ay2A9TBlk9yzOg4i7uTLhQIi', false, false, false, true, 'LECTURER'),
+                    (3, 'akowalska@universitier.edu.pl', '$2a$10$weTMcqbaW092ApTbWANzmOVgnqFoxsI5zxU0XUSA22VyiDQDQBh8O', false, false, false, true, 'LECTURER'),
+                    (6, '3@universitier.edu.pl', '$2a$10$1SVdW6ZnPfIWDDtqTTShzOru6pfDIXBhKJnulP8URqgC0ltBgU/EW', false, false, false, true, 'STUDENT'),
+                    (5, '2@universitier.edu.pl', '$2a$10$g3/dv5VeM7gXdgWS0NxVX.U.exyO29avsd04L7yM6JFoPhhRxmUu2', false, false, false, true, 'STUDENT'),
+                    (4, '1@universitier.edu.pl', '$2a$10$tQ9OJoJpiIi4MqB5NAjPqOGszIohTXrQVjek/2bK0n/JFNwngUF76', false, false, false, true, 'STUDENT');
+        </sql>
+
+        <sql>
+            insert into students (first_name, last_name, user_id)
+            values  ('Kuba', 'Nowak', 4),
+                    ('Piotr', 'Wiśniewski', 5),
+                    ('Filip', 'Wójcik', 6);
+        </sql>
+
+        <sql>
+            insert into faculties (address, name, shortname)
+            values ('al. Powstańców Warszawy 8, 35 - 959 Rzeszów', 'Wydział Budowy Maszyn i Lotnictwa', 'WBMIL'),
+                   ('al. Powstańców Warszawy 6, 35-959 Rzeszów', 'Wydział Chemiczny', 'CHEMIA'),
+                   ('ul. Wincentego Pola 2, 35-959 Rzeszów', 'Wydział Elektrotechniki i Informatyki', 'WEII'),
+                   ('al. Powstańców Warszawy 8, 35-959 Rzeszów', 'Wydział Matematyki i Fizyki Stosowanej', 'WMIFS'),
+                   ('al. Powstańców Warszawy 10, 35-959 Rzeszów', 'Wydział Zarządzania', 'WZ');
+        </sql>
+
+        <sql>
+            insert into courses (name, faculty_id)
+            values ('Automatyka i robotyka', 3),
+                   ('Elektronika i telekomunikacja', 3),
+                   ('Elektrotechnika', 3),
+                   ('Informatyka', 3),
+                   ('Elektromobilność', 3);
+        </sql>
+
+        <sql>
+            insert into academic_years (semesters, academic_year)
+            values  (7, '2020/2021'),
+                    (7, '2021/2022'),
+                    (7, '2022/2023'),
+                    (7, '2023/2024');
+        </sql>
+
+        <sql>
+            insert into student_courses (course_id, student_id, academic_year_id)
+            values  (4, 1, 1),
+                    (4, 2, 4),
+                    (2, 3, 1);
+        </sql>
+
+        <sql>
+            insert into course_academic_years (course_id, academic_year_id)
+            values  (1, 1),
+                    (2, 1),
+                    (3, 1),
+                    (4, 1),
+                    (1, 4),
+                    (2, 4),
+                    (3, 4),
+                    (4, 4),
+                    (5, 4);
+        </sql>
+
+        <sql>
+            insert into programmes (name, course_id)
+            values  ('AA - Inżynieria systemów informatycznych', 4),
+                    ('S - Systemy i sieci komputerowe', 4),
+                    ('TT - Informatyka w przedsiębiorstwie', 4),
+                    ('Z - Inżynieria systemów złożonych', 4);
+        </sql>
+
+        <sql>
+            insert into programme_academic_years (programme_id, academic_year_id)
+            values  (1, 1),
+                    (2, 1),
+                    (3, 1),
+                    (1, 4),
+                    (3, 4),
+                    (4, 4);
+        </sql>
+
+        <sql>
+            insert into modules (name, ects, hours, is_exam, programme_id)
+            values  ('Analiza matematyczna i algebra liniowa', 6, 75, true, 1),
+                    ('Bezpieczeństwo pracy i ergonomia', 1, 15, false, 1),
+                    ('Ekonomia', 1, 15, false, 1),
+                    ('Etyka', 1, 15, false, 1),
+                    ('Fizyka', 6, 75, true, 1),
+                    ('Moduł humanistyczny', 2, 30, false, 1),
+                    ('Programowanie w języku C', 4, 45, false, 1),
+                    ('Sygnały i systemy', 5, 60, true, 1),
+                    ('Wstęp do programowania', 4, 45, false, 1),
+                    ('Wychowanie fizyczne', 0, 30, false, 1),
+                    ('Języki, automaty i obliczenia', 5, 55, true, 1),
+                    ('Logika i teoria mnogości', 2, 30, false, 1),
+                    ('Narzędzia dla programistów', 3, 40, false, 1),
+                    ('Technika informacyjno-pomiarowa', 5, 60, false, 1);
+        </sql>
+
+        <sql>
+            insert into module_academic_years (module_id, academic_year_id)
+            values  (1, 1),
+                    (2, 1),
+                    (3, 1),
+                    (4, 1),
+                    (5, 1),
+                    (6, 1),
+                    (7, 1),
+                    (8, 1),
+                    (9, 1),
+                    (10, 1);
+        </sql>
+
+        <sql>
+            insert into groups (number, module_id, class_type, academic_year_id)
+            values (1, 7, 'W', 1),
+                   (1, 7, 'C', 1),
+                   (2, 7, 'C', 1),
+                   (1, 7, 'L', 1),
+                   (2, 7, 'L', 1),
+                   (3, 7, 'L', 1),
+                   (4, 7, 'L', 1),
+                   (1, 7, 'P', 1),
+                   (2, 7, 'P', 1),
+                   (3, 7, 'P', 1),
+                   (4, 7, 'P', 1),
+                   (1, 7, 'W', 4),
+                   (1, 7, 'C', 4),
+                   (1, 7, 'L', 4),
+                   (2, 7, 'L', 4),
+                   (1, 7, 'P', 4),
+                   (2, 7, 'P', 4);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

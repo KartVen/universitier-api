@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: universitier
+  banner:
+    location: classpath:banner.txt
+  datasource:
+    url: jdbc:postgresql://postgres/universitier
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate.types.print.banner: false
+  liquibase:
+    change-log: classpath:/db/changelog/root.xml
+    contexts: prod
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /api/actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: ADMINISTRATOR
+      show-components: always
+
+app:
+  jwt:
+    secret-key: 75504c5d2a5603a96df0f8dd76d38744744b5a5d90a462347c9f2a15cbea3d58126f2df4312645b4cf6e21cd8480f450b354fc2160c195d7561e7c739bd35c4e
