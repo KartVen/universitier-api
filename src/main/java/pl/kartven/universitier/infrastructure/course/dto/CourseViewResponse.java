@@ -9,7 +9,7 @@ public class CourseViewResponse {
     Long id;
     String name;
     Faculty faculty;
-    Set<AcademicYear> academicYears;
+    Set<Programme> programmes;
 
     @Value
     public static class Faculty {
@@ -18,9 +18,9 @@ public class CourseViewResponse {
     }
 
     @Value
-    public static class AcademicYear {
+    public static class Programme {
         Long id;
-        String academicYear;
+        String name;
+        String shortname;
     }
-
 }

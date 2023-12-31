@@ -1,4 +1,4 @@
-package pl.kartven.universitier.infrastructure.auth.adapters.security;
+package pl.kartven.universitier.infrastructure.auth.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -29,10 +29,10 @@ public class UserPrincipal implements UserDetails {
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
 
-    public static UserPrincipal map(User user) {
+    public static UserPrincipal map(User user, String username) {
         return UserPrincipal.builder()
                 .id(user.getId())
-                .username(user.getEmail())
+                .username(username)
                 .password(user.getPassword())
                 .authorities(List.of(new SimpleGrantedAuthority(user.getRole().toString())))
                 .isAccountNonExpired(!user.isAccountExpired())

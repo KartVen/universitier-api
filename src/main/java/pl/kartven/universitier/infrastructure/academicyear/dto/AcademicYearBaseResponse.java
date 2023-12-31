@@ -6,5 +6,5 @@ import lombok.Value;
 public class AcademicYearBaseResponse {
     Long id;
     Integer semesters;
-    String academicYear;
+    String range;
 }

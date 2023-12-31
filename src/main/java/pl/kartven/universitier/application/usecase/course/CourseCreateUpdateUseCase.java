@@ -38,7 +38,7 @@ public class CourseCreateUpdateUseCase implements ICourseCreateUpdateUseCase {
 
         var course = mapper.map(request);
         course.setFaculty(faculty.get());
-        course.getAcademicYears().addAll(academicYears.get());
+        //course.getAcademicYears().addAll(academicYears.get());
 
         return Try.of(() -> repository.save(course))
                 .toEither()
@@ -48,7 +48,7 @@ public class CourseCreateUpdateUseCase implements ICourseCreateUpdateUseCase {
 
     @Override
     public Either<ApiException, Void> execute(Long id, CourseAddEditRequest request) {
-        return Option.ofOptional(repository.findByIdWithFAndAY(id))
+        return Option.ofOptional(repository.findByIdWithFAndCN(id))
                 .toEither((ApiException) new ResourceNotFoundException("Course not found: " + id))
                 .map(entity -> mapper.update(entity, request, fetchAcademicYears(request.getAcademicYearsIds()).get()))
                 .flatMap(entity -> Try.of(() -> repository.save(entity))
@@ -68,18 +68,10 @@ public class CourseCreateUpdateUseCase implements ICourseCreateUpdateUseCase {
         @Mapping(target = "id", ignore = true)
         @Mapping(target = "faculty", ignore = true)
         @Mapping(target = "programmes", ignore = true)
-        @Mapping(target = "academicYears", ignore = true)
-        @Mapping(target = "studentCourses", ignore = true)
         Course map(CourseAddEditRequest request);
 
         default Course update(Course entity, CourseAddEditRequest request, Set<AcademicYear> academicYears) {
             entity.setName(request.getName());
-            var academicYearsStrings = entity.getAcademicYears().stream()
-                    .map(AcademicYear::getAcademicYear)
-                    .toList();
-            entity.getAcademicYears().addAll(academicYears.stream()
-                    .filter(academicYear -> !academicYearsStrings.contains(academicYear.getAcademicYear()))
-                    .toList());
             return entity;
         }
     }

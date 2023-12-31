@@ -33,5 +33,6 @@ management:
       show-components: always
 
 app:
+  init: ONCE
   jwt:
     secret-key: 75504c5d2a5603a96df0f8dd76d38744744b5a5d90a462347c9f2a15cbea3d58126f2df4312645b4cf6e21cd8480f450b354fc2160c195d7561e7c739bd35c4e

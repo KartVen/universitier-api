@@ -6,5 +6,6 @@ import lombok.Value;
 public class ProgrammeForPageResponse {
     String id;
     String name;
+    String shortName;
     String courseName;
 }

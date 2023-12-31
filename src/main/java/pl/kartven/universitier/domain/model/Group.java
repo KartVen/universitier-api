@@ -21,26 +21,17 @@ public class Group {
 
     @NotNull
     @Column(nullable = false)
-    private Long number;
-
-    @ManyToOne
-    @JoinColumn(name = "module_id", nullable = false)
-    private Module module;
+    private Integer number;
 
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ClassType classType;
+    private Type type;
 
-    @ManyToOne
-    @JoinColumn(name = "academic_year_id", nullable = false)
-    private AcademicYear academicYear;
+    @OneToMany(mappedBy = "group")
+    private Set<Connection> connections = new HashSet<>();
 
-    @ManyToMany(mappedBy = "groups")
-    @NotNull
-    private Set<Student> student = new HashSet<>();
-
-    public enum ClassType {
+    public enum Type {
         W,
         C,
         L,

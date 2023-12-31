@@ -1,9 +1,9 @@
-package pl.kartven.universitier.infrastructure.auth.adapters.dto;
+package pl.kartven.universitier.infrastructure.auth.dto;
 
 import lombok.Value;
 
 @Value
 public class AuthResponse {
-    Long id;
+    String id;
     String bearer;
 }

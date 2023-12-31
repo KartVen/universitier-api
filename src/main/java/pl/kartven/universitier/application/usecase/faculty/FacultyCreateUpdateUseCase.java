@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import pl.kartven.universitier.application.exception.ApiException;
 import pl.kartven.universitier.application.exception.ResourceNotFoundException;
 import pl.kartven.universitier.application.exception.ServerProcessingException;
-import pl.kartven.universitier.infrastructure.common.dto.AddEditResponse;
 import pl.kartven.universitier.domain.model.Faculty;
 import pl.kartven.universitier.domain.repository.FacultyRepository;
+import pl.kartven.universitier.infrastructure.common.dto.AddEditResponse;
 import pl.kartven.universitier.infrastructure.faculty.dto.FacultyAddEditRequest;
 
 @AllArgsConstructor
@@ -45,13 +45,13 @@ public class FacultyCreateUpdateUseCase implements IFacultyCreateUpdateUseCase {
         @Mapping(target = "id", ignore = true)
         @Mapping(target = "courses", ignore = true)
         @Mapping(target = "shortname", source = "shortName")
-        @Mapping(target = "address", source = "address")
         Faculty map(FacultyAddEditRequest request);
 
         default Faculty update(Faculty entity, FacultyAddEditRequest request){
-            var faculty = this.map(request);
-            faculty.setId(entity.getId());
-            return faculty;
+            entity.setName(request.getName());
+            entity.setShortname(request.getShortName());
+            entity.setYearFounded(request.getYearFounded());
+            return entity;
         }
     }
 }

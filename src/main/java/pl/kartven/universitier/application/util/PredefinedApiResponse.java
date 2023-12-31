@@ -12,7 +12,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.CLASS;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Retention(CLASS)
+@Retention(RUNTIME)
 @Target({METHOD, TYPE, ANNOTATION_TYPE})
 @ApiResponse(responseCode = "500", description = "Internal Server Error",
         content = @Content(schema = @Schema(implementation = ApiError.class))

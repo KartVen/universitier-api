@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.kartven.universitier.domain.model.Faculty;
+import pl.kartven.universitier.domain.model.Programme;
 
 import java.util.Optional;
 
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Long>, JpaSpecificationExecutor<Faculty> {
-    @Query("select distinct f from Faculty f left join fetch f.courses where f.id = :id")
-    Optional<Faculty> findByIdWithFetch(Long id);
+    @Query("SELECT f FROM Faculty f LEFT JOIN FETCH f.courses WHERE f.id = :id")
+    Optional<Faculty> findByIdWithC(Long id);
 
     @Query(
             value = "SELECT f FROM Faculty f WHERE " +

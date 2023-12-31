@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "students")
-public class Student {
+public class Student extends Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,18 +30,21 @@ public class Student {
     @Column(nullable = false)
     private String lastName;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "student")
-    private Set<StudentCourse> studentCourses = new HashSet<>();
-
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @NotNull
-    @JoinTable(name = "student_groups",
-            joinColumns = @JoinColumn(name = "group_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "student_id", nullable = false)
+    @JoinTable(name = "student_connections",
+            joinColumns = @JoinColumn(name = "student_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "connection_id", nullable = false)
     )
-    private Set<Group> groups = new HashSet<>();
+    private Set<Connection> connections = new HashSet<>();
+
+    public Student(String firstName, String lastName, User user) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.user = user;
+    }
 }

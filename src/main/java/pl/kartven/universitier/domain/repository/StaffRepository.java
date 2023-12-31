@@ -1,16 +1,22 @@
 package pl.kartven.universitier.domain.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.kartven.universitier.domain.model.Staff;
 
+import java.util.Optional;
+
 @Repository
-public interface StaffRepository extends JpaRepository<Staff, Long>, JpaSpecificationExecutor<Staff> {
-        @Query(
+public interface StaffRepository extends JpaRepository<Staff, String>, JpaSpecificationExecutor<Staff> {
+
+    @Query("SELECT s FROM Staff s " +
+            "INNER JOIN FETCH s.user " +
+            "WHERE s.referenceId = :id")
+    Optional<Staff> findByRefIdWithU(String id);
+
+        /*@Query(
             value = "SELECT s FROM Staff s INNER JOIN FETCH s.user u WHERE " +
                     "(:firstName IS NULL OR s.firstName = :firstName) OR " +
                     "(:lastName IS NULL OR s.lastName = :lastName) OR " +
@@ -25,5 +31,5 @@ public interface StaffRepository extends JpaRepository<Staff, Long>, JpaSpecific
             String lastName,
             String email,
             Pageable pageable
-    );
+    );*/
 }

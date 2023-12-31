@@ -12,10 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.kartven.universitier.application.exception.ApiException;
 import pl.kartven.universitier.application.exception.BadRequestException;
-import pl.kartven.universitier.infrastructure.auth.JwtTool;
-import pl.kartven.universitier.infrastructure.auth.adapters.dto.AuthResponse;
-import pl.kartven.universitier.infrastructure.auth.adapters.dto.LoginRequest;
-import pl.kartven.universitier.infrastructure.auth.adapters.security.UserPrincipal;
+import pl.kartven.universitier.application.util.JwtHelper;
+import pl.kartven.universitier.infrastructure.auth.jwt.JwtTool;
+import pl.kartven.universitier.infrastructure.auth.dto.AuthResponse;
+import pl.kartven.universitier.infrastructure.auth.dto.LoginRequest;
+import pl.kartven.universitier.infrastructure.auth.service.UserPrincipal;
 
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class LoginUseCase {
                 .toEither()
                 .mapLeft(ex -> Match(ex).of(
                         Case($(instanceOf(BadCredentialsException.class)),
-                                e -> new BadRequestException("Invalid email or password")),
+                                e -> new BadRequestException("Invalid username/email or password")),
                         Case($(), e -> new BadRequestException(ex.getMessage()))
                 ));
     }
@@ -42,26 +43,12 @@ public class LoginUseCase {
         SecurityContext context = SecurityContextHolder.getContext();
         var auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(), request.getPassword()
+                        request.getUsernameOrEmail(), request.getPassword()
                 )
         );
         context.setAuthentication(auth);
         var principal = (UserPrincipal) context.getAuthentication().getPrincipal();
-        var jwt = jwtTool.generateToken(map(principal));
-        return new AuthResponse(principal.getId(), jwt.bearer());
+        var jwt = jwtTool.generateToken(JwtHelper.map(principal));
+        return new AuthResponse(principal.getId().toString(), jwt.bearer());
     }
-
-    private JwtTool.UserDetails map(UserPrincipal principal) {
-        var authorities = principal.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toSet());
-        return JwtTool.UserDetails.builder()
-                .id(principal.getId())
-                .username(principal.getUsername())
-                .authorities(authorities)
-                .build();
-    }
-
-
 }

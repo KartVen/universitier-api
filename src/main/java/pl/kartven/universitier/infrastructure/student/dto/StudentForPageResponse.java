@@ -7,6 +7,6 @@ public class StudentForPageResponse {
     Long id;
     String firstName;
     String lastName;
-    String email;
-    boolean isActive;
+    Integer coursesCount;
+    Boolean isActive;
 }

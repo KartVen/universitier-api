@@ -32,15 +32,4 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private Set<Programme> programmes = new HashSet<>();
-
-    @ManyToMany
-    @NotNull
-    @JoinTable(name = "course_academic_years",
-            joinColumns = @JoinColumn(name = "course_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "academic_year_id", nullable = false)
-    )
-    private Set<AcademicYear> academicYears = new HashSet<>();
-
-    @OneToMany(mappedBy = "course")
-    private Set<StudentCourse> studentCourses = new HashSet<>();
 }

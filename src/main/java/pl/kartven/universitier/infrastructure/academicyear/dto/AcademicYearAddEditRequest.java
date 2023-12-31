@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class AcademicYearAddEditRequest {
     private final Integer semesters;
-    private final String academicYear;
+    private final String range;
 }

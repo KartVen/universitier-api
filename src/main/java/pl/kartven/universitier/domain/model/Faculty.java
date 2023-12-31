@@ -30,6 +30,8 @@ public class Faculty {
     @Column(nullable = false)
     private String shortname;
 
+    private Integer yearFounded;
+
     @NotBlank
     @NotNull
     @Column(nullable = false)

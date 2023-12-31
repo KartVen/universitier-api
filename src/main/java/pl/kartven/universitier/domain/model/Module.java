@@ -48,11 +48,6 @@ public class Module {
     @JoinColumn(name = "programme_id", nullable = false)
     private Programme programme;
 
-    @ManyToMany
-    @NotNull
-    @JoinTable(name = "module_academic_years",
-            joinColumns = @JoinColumn(name = "academic_year_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "module_id", nullable = false)
-    )
-    private Set<AcademicYear> academicYears = new HashSet<>();
+    @OneToMany(mappedBy = "module", cascade = CascadeType.MERGE)
+    private Set<Connection> connections = new HashSet<>();
 }

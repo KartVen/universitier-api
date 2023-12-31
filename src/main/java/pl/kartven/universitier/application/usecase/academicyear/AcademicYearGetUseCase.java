@@ -38,16 +38,16 @@ public class AcademicYearGetUseCase implements IAcademicYearGetUseCase {
                 ));
     }
 
-    private List<AcademicYearForPageResponse> mapToSemesterForPage(Page<AcademicYear> pages) {
-        return pages.stream().map(mapper::mapToForPage).toList();
-    }
-
     private Page<AcademicYear> executeInRepo(FilterParams filterParams, PageRequest pageRequest) {
         return repository.findAllByCriteria(
                 Try.of(() -> Integer.parseInt(filterParams.getPhrase())).getOrNull(),
                 filterParams.getPhrase(),
                 pageRequest
         );
+    }
+
+    private List<AcademicYearForPageResponse> mapToSemesterForPage(Page<AcademicYear> pages) {
+        return pages.stream().map(mapper::mapToForPage).toList();
     }
 
     @Override

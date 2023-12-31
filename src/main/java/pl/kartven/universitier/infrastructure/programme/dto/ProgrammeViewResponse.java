@@ -8,8 +8,9 @@ import java.util.Set;
 public class ProgrammeViewResponse {
     Long id;
     String name;
+    String shortName;
     Course course;
-    Set<AcademicYear> academicYears;
+    Set<Module> modules;
 
     @Value
     public static class Course {
@@ -18,9 +19,8 @@ public class ProgrammeViewResponse {
     }
 
     @Value
-    public static class AcademicYear {
+    public static class Module {
         Long id;
-        String academicYear;
+        String name;
     }
-
 }

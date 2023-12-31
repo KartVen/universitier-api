@@ -1,4 +1,4 @@
-package pl.kartven.universitier.infrastructure.auth;
+package pl.kartven.universitier.infrastructure.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

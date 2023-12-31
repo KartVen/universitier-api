@@ -21,11 +21,6 @@ public class User {
     @NotBlank
     @NotNull
     @Column(nullable = false)
-    private String email;
-
-    @NotBlank
-    @NotNull
-    @Column(nullable = false)
     private String password;
 
     private boolean isAccountExpired;
@@ -38,8 +33,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(String email, String password, Role role) {
-        this.email = email;
+    public User(String password, Role role) {
         this.password = password;
         this.role = role;
         isAccountExpired = isAccountLocked = isCredentialsExpired =  false;
@@ -50,7 +44,6 @@ public class User {
         ADMINISTRATOR,
         STAFF,
         LECTURER,
-        STUDENT,
-        GUEST;
+        STUDENT
     }
 }

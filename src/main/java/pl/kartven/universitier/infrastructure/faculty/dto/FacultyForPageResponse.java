@@ -7,4 +7,5 @@ public class FacultyForPageResponse {
     Long id;
     String name;
     String shortName;
+    Integer yearFounded;
 }

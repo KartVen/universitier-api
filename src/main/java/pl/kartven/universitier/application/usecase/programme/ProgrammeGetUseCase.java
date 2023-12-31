@@ -14,8 +14,6 @@ import pl.kartven.universitier.application.exception.ResourceNotFoundException;
 import pl.kartven.universitier.application.exception.ServerProcessingException;
 import pl.kartven.universitier.application.util.FilterParams;
 import pl.kartven.universitier.domain.model.Programme;
-import pl.kartven.universitier.domain.repository.CourseRepository;
-import pl.kartven.universitier.domain.repository.ProgrammeRepository;
 import pl.kartven.universitier.domain.repository.ProgrammeRepository;
 import pl.kartven.universitier.infrastructure.programme.dto.ProgrammeForPageResponse;
 import pl.kartven.universitier.infrastructure.programme.dto.ProgrammeViewResponse;
@@ -39,21 +37,22 @@ public class ProgrammeGetUseCase implements IProgrammeGetUseCase {
                 ));
     }
 
-    private List<ProgrammeForPageResponse> mapToProgrammeForPage(Page<Programme> pages) {
-        return pages.stream().map(mapper::mapToForPage).toList();
-    }
-
     private Page<Programme> executeInRepo(FilterParams filterParams, PageRequest pageRequest) {
         return repository.findAllByCriteria(
+                filterParams.getPhrase(),
                 filterParams.getPhrase(),
                 filterParams.getPhrase(),
                 pageRequest
         );
     }
 
+    private List<ProgrammeForPageResponse> mapToProgrammeForPage(Page<Programme> pages) {
+        return pages.stream().map(mapper::mapToForPage).toList();
+    }
+
     @Override
     public Either<ApiException, ProgrammeViewResponse> execute(Long id) {
-        return Option.ofOptional(repository.findByIdWithCAndAY(id))
+        return Option.ofOptional(repository.findByIdWithCAndM(id))
                 .toEither((ApiException) new ResourceNotFoundException("Programme not found: " + id))
                 .map(mapper::mapToView);
     }
@@ -62,8 +61,10 @@ public class ProgrammeGetUseCase implements IProgrammeGetUseCase {
     public interface ProgrammeMapper {
 
         @Mapping(target = "courseName", source = "course.name")
+        @Mapping(target = "shortName", source = "shortname")
         ProgrammeForPageResponse mapToForPage(Programme programme);
 
+        @Mapping(target = "shortName", source = "shortname")
         ProgrammeViewResponse mapToView(Programme programme);
     }
 }

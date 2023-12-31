@@ -1,4 +1,4 @@
-package pl.kartven.universitier.infrastructure.auth;
+package pl.kartven.universitier.infrastructure.auth.jwt;
 
 import io.vavr.control.Try;
 import lombok.NonNull;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.kartven.universitier.domain.repository.UserRepository;
-import pl.kartven.universitier.infrastructure.auth.adapters.security.UserPrincipal;
+import pl.kartven.universitier.infrastructure.auth.service.UserPrincipal;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -32,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        Try.of(() -> extractToken(request))
+        /*Try.of(() -> extractToken(request))
                 .map(token -> Try.of(() -> token)
                         .filter(value -> value != null && jwtTool.isTokenValid(value))
                         .getOrNull())
@@ -40,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 .onFailure(err -> log.warn("Failed to deserialize token"))
                 .map(token -> userRepository.findByEmail(token.getUsername()).get())
                 .map(user -> {
-                    var userPrincipal = UserPrincipal.map(user);
+                    var userPrincipal = UserPrincipal.map(user, "");
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userPrincipal,
                             null,
@@ -50,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     return true;
                 })
                 .onFailure(err -> log.warn("Could not set user authentication in security context"));
-
+*/
         filterChain.doFilter(request, response);
     }
 

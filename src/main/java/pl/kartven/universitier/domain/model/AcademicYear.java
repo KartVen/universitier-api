@@ -25,19 +25,10 @@ public class AcademicYear {
     private Integer semesters;
 
     @NotNull
-    @Column(name = "academic_year")
+    @Column(name = "range")
     @Size(max = 9)
-    private String academicYear;
+    private String range;
 
-    @ManyToMany(mappedBy = "academicYears")
-    @NotNull
-    private Set<Course> courses = new HashSet<>();
-
-    @ManyToMany(mappedBy = "academicYears")
-    @NotNull
-    private Set<Programme> programmes = new HashSet<>();
-
-    @ManyToMany(mappedBy = "academicYears")
-    @NotNull
-    private Set<Module> modules = new HashSet<>();
+    @OneToMany(mappedBy = "academicYear")
+    private Set<Connection> connections = new HashSet<>();
 }

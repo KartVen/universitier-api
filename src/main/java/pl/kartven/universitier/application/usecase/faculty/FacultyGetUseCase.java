@@ -38,10 +38,6 @@ public class FacultyGetUseCase implements IFacultyGetUseCase {
                 ));
     }
 
-    private List<FacultyForPageResponse> mapToFacultyForPage(Page<Faculty> pages) {
-        return pages.stream().map(mapper::mapToForPage).toList();
-    }
-
     private Page<Faculty> executeInRepo(FilterParams filterParams, PageRequest pageRequest) {
         return repository.findAllByCriteria(
                 filterParams.getPhrase(),
@@ -50,9 +46,13 @@ public class FacultyGetUseCase implements IFacultyGetUseCase {
         );
     }
 
+    private List<FacultyForPageResponse> mapToFacultyForPage(Page<Faculty> pages) {
+        return pages.stream().map(mapper::mapToForPage).toList();
+    }
+
     @Override
     public Either<ApiException, FacultyViewResponse> execute(Long id) {
-        return Option.ofOptional(repository.findById(id))
+        return Option.ofOptional(repository.findByIdWithC(id))
                 .toEither((ApiException) new ResourceNotFoundException("Faculty not found: " + id))
                 .map(mapper::mapToView);
     }

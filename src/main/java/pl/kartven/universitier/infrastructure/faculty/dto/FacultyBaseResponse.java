@@ -7,4 +7,5 @@ public class FacultyBaseResponse {
     Long id;
     String name;
     String shortName;
+    Integer yearFounded;
 }

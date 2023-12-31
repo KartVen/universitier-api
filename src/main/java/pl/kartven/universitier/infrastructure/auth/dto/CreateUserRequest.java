@@ -1,4 +1,4 @@
-package pl.kartven.universitier.infrastructure.auth.adapters.dto;
+package pl.kartven.universitier.infrastructure.auth.dto;
 
 import lombok.Data;
 
