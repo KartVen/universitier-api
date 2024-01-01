@@ -2,7 +2,6 @@ package pl.kartven.universitier.application.usecase.student;
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
-import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,7 +20,6 @@ import pl.kartven.universitier.domain.repository.*;
 import pl.kartven.universitier.infrastructure.student.dto.StudentForPageResponse;
 import pl.kartven.universitier.infrastructure.student.dto.StudentViewResponse;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -78,10 +76,10 @@ public class StudentGetUseCase implements IStudentGetUseCase {
     public interface StudentMapper {
 
         @Mapping(target = "coursesCount", constant = "0")
-        @Mapping(target = "isActive", source = "user.enabled")
+        @Mapping(target = "isActive", source = "user.active")
         StudentForPageResponse mapToForPage(Student student);
 
-        @Mapping(target = "isActive", source = "user.enabled")
+        @Mapping(target = "isActive", source = "user.active")
         @Mapping(target = "email", source = "student", qualifiedByName = "mapEmail")
         @Mapping(target = "id", source = "id")
         @Mapping(target = "courses", expression = "java(new java.util.HashSet<>())")
@@ -107,7 +105,7 @@ public class StudentGetUseCase implements IStudentGetUseCase {
                                 .toList();
                         var viewGroups = filteredConnections.stream()
                                 .map(Connection::getGroup)
-                                .map(group -> new StudentViewResponse.Course.Programme.Module.Group(
+                                .map(group -> new StudentViewResponse.CourseDto.ProgrammeDto.ModuleDto.GroupDto(
                                         group.getId(), group.getType(), group.getNumber()
                                 ))
                                 .collect(Collectors.toSet());
@@ -115,16 +113,16 @@ public class StudentGetUseCase implements IStudentGetUseCase {
                                 .filter(con -> con.getModule().getId().equals(module.getId()))
                                 .map(Connection::getAcademicYear)
                                 .findFirst()
-                                .map(academicYear -> new StudentViewResponse.Course.Programme.Module.AcademicYear(
-                                        academicYear.getId(), academicYear.getRange()
+                                .map(academicYear -> new StudentViewResponse.CourseDto.ProgrammeDto.ModuleDto.AcademicYearDto(
+                                        academicYear.getId(), academicYear.getMark()
                                 ));
-                        return new StudentViewResponse.Course.Programme.Module(
+                        return new StudentViewResponse.CourseDto.ProgrammeDto.ModuleDto(
                                 module.getId(), module.getName(), viewAcaYear.orElse(null), viewGroups
                         );
                     }).collect(Collectors.toSet());
-                    return new StudentViewResponse.Course.Programme(programme.getId(), programme.getName(), viewModules);
+                    return new StudentViewResponse.CourseDto.ProgrammeDto(programme.getId(), programme.getName(), viewModules);
                 }).findFirst();
-                return new StudentViewResponse.Course(course.getId(), course.getName(), viewProgramme.orElse(null));
+                return new StudentViewResponse.CourseDto(course.getId(), course.getName(), viewProgramme.orElse(null));
             }).collect(Collectors.toSet());
             view.getCourses().addAll(viewCourses);
             return view;

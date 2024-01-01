@@ -26,7 +26,7 @@ public class AcademicYearCreateUpdateUseCase implements IAcademicYearCreateUpdat
         return Try.of(() -> repository.save(mapper.map(request)))
                 .toEither()
                 .mapLeft(th -> (ApiException) new ServerProcessingException(th.getMessage()))
-                .map(academicYear -> new AddEditResponse(academicYear.getId().toString(), academicYear.getRange()));
+                .map(academicYear -> new AddEditResponse(academicYear.getId().toString(), academicYear.getMark()));
     }
 
     @Override
@@ -43,13 +43,12 @@ public class AcademicYearCreateUpdateUseCase implements IAcademicYearCreateUpdat
     @Mapper(componentModel = "spring")
     public interface SemesterMapper {
         @Mapping(target = "id", ignore = true)
-        @Mapping(target = "semesters", ignore = true)
         @Mapping(target = "connections", ignore = true)
         AcademicYear map(AcademicYearAddEditRequest request);
 
         default AcademicYear update(AcademicYear entity, AcademicYearAddEditRequest request){
-            entity.setSemesters(request.getSemesters());
-            //entity.setAcademicYear(request.getAcademicYear());
+            entity.setMark(request.getMark());
+            entity.setIsClosed(request.getIsClosed());
             return entity;
         }
     }

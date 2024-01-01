@@ -14,12 +14,10 @@ import pl.kartven.universitier.application.exception.ResourceNotFoundException;
 import pl.kartven.universitier.application.exception.ServerProcessingException;
 import pl.kartven.universitier.application.util.FilterParams;
 import pl.kartven.universitier.domain.model.Course;
-import pl.kartven.universitier.domain.model.Group;
 import pl.kartven.universitier.domain.repository.CourseRepository;
 import pl.kartven.universitier.infrastructure.course.dto.CourseBaseResponse;
 import pl.kartven.universitier.infrastructure.course.dto.CourseForPageResponse;
 import pl.kartven.universitier.infrastructure.course.dto.CourseViewResponse;
-import pl.kartven.universitier.infrastructure.group.dto.GroupBaseResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +73,7 @@ public class CourseGetUseCase implements ICourseGetUseCase {
 
     @Mapper(componentModel = "spring")
     public interface CourseMapper {
-        @Mapping(target = "facultyShortName", source = "faculty.shortname")
+        @Mapping(target = "facultyShortName", source = "faculty.shortName")
         CourseForPageResponse mapToForPage(Course course);
 
         CourseViewResponse mapToView(Course course);

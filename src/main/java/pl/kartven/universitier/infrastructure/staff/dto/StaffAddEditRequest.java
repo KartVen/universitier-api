@@ -1,8 +1,6 @@
 package pl.kartven.universitier.infrastructure.staff.dto;
 
 import lombok.Data;
-import pl.kartven.universitier.domain.model.User;
-import pl.kartven.universitier.domain.model.Work;
 
 import java.util.Set;
 
@@ -12,28 +10,42 @@ public class StaffAddEditRequest {
     private final String lastName;
     private final String username;
     private final String password;
-    private final User.Role role;
-    private final Address address;
-    private final Set<Work> works;
-    private final String description;
-    private final Set<Group> groups;
+    private final RoleEDto role;
+    private final AddressDto address;
+    private final String email;
+    private final String phone;
+    private final Set<WorkDto> works;
+    private final Set<GroupDto> groups;
+
+
+    public enum RoleEDto {
+        ACADEMIC_STAFF,
+        NON_ACADEMIC_STAFF,
+        LECTURER
+    }
 
     @Data
-    public static class Address {
+    public static class AddressDto {
         private final String street;
+        private final String home;
         private final String city;
         private final String zipCode;
-        private final String postDist;
     }
 
     @Data
-    public static class Work {
-        private final String position;
-        private final pl.kartven.universitier.domain.model.Work.Status status;
+    public static class WorkDto {
+        private final String positionName;
+        private final StatusEDto status;
+        private final Long facultyId;
+
+        public enum StatusEDto {
+            PROGRESS,
+            FINISHED
+        }
     }
 
     @Data
-    public static class Group {
+    public static class GroupDto {
         private final Long moduleId;
         private final Long groupId;
         private final Long academicYearId;

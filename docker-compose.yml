@@ -1,15 +1,15 @@
 version: '3.7'
 
 services:
-  postgres:
+  db_postgres:
     image: postgres:14.1-alpine
-    container_name: universitier_postgres
+    container_name: universitier_db
     environment:
       POSTGRES_DB: universitier
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-        - postgres:/var/lib/postgresql/data
+        - db_postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -19,4 +19,4 @@ networks:
   internal:
 
 volumes:
-  postgres:
+  db_postgres:

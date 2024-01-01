@@ -9,17 +9,17 @@ public class ProgrammeViewResponse {
     Long id;
     String name;
     String shortName;
-    Course course;
-    Set<Module> modules;
+    CourseDto course;
+    Set<ModuleDto> modules;
 
     @Value
-    public static class Course {
+    public static class CourseDto {
         Long id;
         String name;
     }
 
     @Value
-    public static class Module {
+    public static class ModuleDto {
         Long id;
         String name;
     }

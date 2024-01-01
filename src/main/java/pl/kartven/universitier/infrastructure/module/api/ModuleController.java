@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.kartven.universitier.application.usecase.module.IModuleCreateUpdateUseCase;
 import pl.kartven.universitier.application.usecase.module.IModuleDeleteUseCase;
@@ -16,8 +17,6 @@ import pl.kartven.universitier.application.usecase.module.IModuleGetUseCase;
 import pl.kartven.universitier.application.util.FilterParams;
 import pl.kartven.universitier.application.util.PredefinedApiResponse;
 import pl.kartven.universitier.application.util.RestErrorHandler;
-import pl.kartven.universitier.infrastructure.connection.dto.ConnectionViewResponse;
-import pl.kartven.universitier.infrastructure.faculty.dto.FacultyBaseResponse;
 import pl.kartven.universitier.infrastructure.module.dto.ModuleAddEditRequest;
 import pl.kartven.universitier.infrastructure.module.dto.ModuleBaseResponse;
 import pl.kartven.universitier.infrastructure.module.dto.ModuleViewResponse;
@@ -64,6 +63,7 @@ public class ModuleController implements RestErrorHandler {
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema()))
     @PredefinedApiResponse.BadRequest
     @PredefinedApiResponse.Created
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ModuleAddEditRequest request) {
         return createUpdateUseCase.execute(request)
@@ -73,6 +73,7 @@ public class ModuleController implements RestErrorHandler {
     @PredefinedApiResponse.NoContent
     @PredefinedApiResponse.NotFound
     @PredefinedApiResponse.BadRequest
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
@@ -92,6 +93,7 @@ public class ModuleController implements RestErrorHandler {
 
     @PredefinedApiResponse.NotFound
     @PredefinedApiResponse.NoContent
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         return deleteUseCase.execute(id)

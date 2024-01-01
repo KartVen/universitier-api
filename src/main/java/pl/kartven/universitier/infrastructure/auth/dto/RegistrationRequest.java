@@ -8,17 +8,33 @@ import javax.validation.constraints.Size;
 
 @Data
 public class RegistrationRequest {
-    @NotBlank(message = "Username cannot be empty")
-    @Size(min = 8, message = "Username must be at least 8 characters long")
+    @NotBlank
+    @Size(min = 8)
     private final String username;
-
-    @NotBlank(message = "Password cannot be empty")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @NotBlank
+    @Size(min = 8)
     private final String password;
-
-    @NotBlank(message = "Firstname cannot be empty")
+    @NotBlank
     private final String firstName;
-
-    @NotBlank(message = "Lastname cannot be empty")
+    @NotBlank
     private final String lastName;
+    @NotBlank
+    private final AddressDto address;
+    @NotBlank
+    @Email
+    private final String email;
+    @NotBlank
+    private final String phone;
+
+    @Data
+    public static class AddressDto {
+        @NotBlank
+        private final String street;
+        @NotBlank
+        private final String home;
+        @NotBlank
+        private final String city;
+        @NotBlank
+        private final String zipCode;
+    }
 }

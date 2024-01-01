@@ -1,7 +1,6 @@
 package pl.kartven.universitier.infrastructure.student.dto;
 
 import lombok.Data;
-import pl.kartven.universitier.infrastructure.staff.dto.StaffAddEditRequest;
 
 import java.util.Set;
 
@@ -10,20 +9,21 @@ public class StudentAddEditRequest {
     private final String firstName;
     private final String lastName;
     private final String password;
-    private final Address address;
-    private final String description;
-    private final Set<Programme> programmes;
+    private final AddressDto address;
+    private final String email;
+    private final String phone;
+    private final Set<ProgrammeDto> programmes;
 
     @Data
-    public static class Address {
+    public static class AddressDto {
         private final String street;
-        private final String city;
+        private final String home;
         private final String zipCode;
-        private final String postDist;
+        private final String city;
     }
 
     @Data
-    public static class Programme {
+    public static class ProgrammeDto {
         private final Long programmeId;
         private final Long academicYearId;
     }

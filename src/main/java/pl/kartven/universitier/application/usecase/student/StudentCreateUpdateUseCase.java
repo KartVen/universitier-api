@@ -5,6 +5,7 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import pl.kartven.universitier.application.exception.ApiException;
@@ -32,7 +33,7 @@ public class StudentCreateUpdateUseCase implements IStudentCreateUpdateUseCase {
     @Override
     public Either<ApiException, AddEditResponse> execute(StudentAddEditRequest request) {
         var programmeIds = request.getProgrammes().stream()
-                .map(StudentAddEditRequest.Programme::getProgrammeId).toList();
+                .map(StudentAddEditRequest.ProgrammeDto::getProgrammeId).toList();
         var programmeEither = JpaHelper.getEntitiesSets(
                 programmeRepository::findDistinctByIdIn, programmeIds,
                 Programme::getId, "Programmes"
@@ -40,7 +41,7 @@ public class StudentCreateUpdateUseCase implements IStudentCreateUpdateUseCase {
         if (programmeEither.isLeft()) return Either.left(programmeEither.getLeft());
 
         var acaYearsIds = request.getProgrammes().stream()
-                .map(StudentAddEditRequest.Programme::getAcademicYearId).toList();
+                .map(StudentAddEditRequest.ProgrammeDto::getAcademicYearId).toList();
         var acaYearsEither = JpaHelper.getEntitiesSets(
                 academicYearRepository::findDistinctByIdIn, acaYearsIds,
                 AcademicYear::getId, "Academic years"
@@ -49,8 +50,11 @@ public class StudentCreateUpdateUseCase implements IStudentCreateUpdateUseCase {
         var progConsEither = Option.of(connectionRepository.findAllByProgrammeIdInAndAYIdIn(programmeIds, acaYearsIds))
                 .toEither((ApiException) new ServerProcessingException());
         if (progConsEither.isLeft()) return Either.left(progConsEither.getLeft());
-        var student = mapper.map(request, passwordEncoder);
+
+        var student = mapper.map(request);
+        student.setUser(new User(passwordEncoder.encode(request.getPassword()), User.Role.STUDENT));
         student.setConnections(progConsEither.get());
+
         return Try.of(() -> repository.save(student))
                 .toEither()
                 .mapLeft(th -> (ApiException) new ServerProcessingException(th.getMessage()))
@@ -72,10 +76,14 @@ public class StudentCreateUpdateUseCase implements IStudentCreateUpdateUseCase {
 
     @Mapper(componentModel = "spring")
     public interface StudentMapper {
-        default Student map(StudentAddEditRequest request, PasswordEncoder passwordEncoder) {
-            var user = new User(passwordEncoder.encode(request.getPassword()), User.Role.STUDENT);
-            return new Student(request.getFirstName(), request.getLastName(), user);
-        }
+        @Mapping(target = "id", ignore = true)
+        @Mapping(target = "user", ignore = true)
+        @Mapping(target = "connections", ignore = true)
+        @Mapping(target = "addressStreet", source = "address.street")
+        @Mapping(target = "addressHome", source = "address.home")
+        @Mapping(target = "addressZipCode", source = "address.zipCode")
+        @Mapping(target = "addressCity", source = "address.city")
+        Student map(StudentAddEditRequest request);
 
         default Student update(Student entity, StudentAddEditRequest request) {
             entity.setFirstName(request.getFirstName());

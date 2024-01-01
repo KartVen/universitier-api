@@ -18,16 +18,16 @@ public interface ConnectionRepository extends JpaRepository<Connection, Long> {
                     "INNER JOIN FETCH c.module m " +
                     "INNER JOIN FETCH c.academicYear ay WHERE " +
                     "(:moduleName IS NULL OR m.name = :moduleName) OR " +
-                    "(:academicYearRange IS NULL OR ay.range = :academicYearRange)",
+                    "(:academicYearMark IS NULL OR ay.mark = :academicYearMark)",
             countQuery = "SELECT COUNT(c) FROM Connection c " +
                     "INNER JOIN c.module m " +
                     "INNER JOIN c.academicYear ay WHERE " +
                     "(:moduleName IS NULL OR m.name = :moduleName) OR " +
-                    "(:academicYearRange IS NULL OR ay.range = :academicYearRange)"
+                    "(:academicYearMark IS NULL OR ay.mark = :academicYearMark)"
     )
     Page<Connection> findAllByCriteria(
             String moduleName,
-            String academicYearRange,
+            String academicYearMark,
             Pageable pageable
     );
 

@@ -27,13 +27,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         var username = removeEmailDomain(usernameOrEmail);
         var student = Try.of(() -> Long.parseLong(username))
                 .map(studentRepository::findByIdWithU)
-                .map(Optional::get)
-                .getOrNull();
-        if(student != null) return UserPrincipal.map(student.getUser(), student.getId().toString());
-        var staff = staffRepository.findByRefIdWithU(username)
-                .orElse(null);
-        if (staff == null) throw new UsernameNotFoundException("User not found with username: " + username);
-        return UserPrincipal.map(staff.getUser(), staff.getReferenceId());
+                .map(Optional::get);
+        if(student.isSuccess()) return UserPrincipal.map(student.get().getUser(), student.get().getId().toString());
+        var staff = staffRepository.findByKeyIdWithU(username);
+        return staff.map(value -> UserPrincipal.map(value.getUser(), value.getKeyId()))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + usernameOrEmail));
     }
 
     public static String removeEmailDomain(String username) {

@@ -21,13 +21,13 @@ public class AcademicYear {
     private Long id;
 
     @NotNull
+    @Size(max = 9)
     @Column(nullable = false)
-    private Integer semesters;
+    private String mark;
 
     @NotNull
-    @Column(name = "range")
-    @Size(max = 9)
-    private String range;
+    @Column(nullable = false)
+    private Boolean isClosed;
 
     @OneToMany(mappedBy = "academicYear")
     private Set<Connection> connections = new HashSet<>();

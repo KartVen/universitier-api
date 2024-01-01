@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -34,6 +35,11 @@ public abstract class Person {
     @NotBlank
     @NotNull
     @Column(nullable = false)
+    protected String addressHome;
+
+    @NotBlank
+    @NotNull
+    @Column(nullable = false)
     protected String addressZipCode;
 
     @NotBlank
@@ -43,6 +49,12 @@ public abstract class Person {
 
     @NotBlank
     @NotNull
+    @Email
     @Column(nullable = false)
-    protected String addressPostDist;
+    private String email;
+
+    @NotBlank
+    @NotNull
+    @Column(nullable = false)
+    private String phone;
 }

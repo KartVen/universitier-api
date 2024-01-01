@@ -23,10 +23,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private boolean isAccountExpired;
-    private boolean isAccountLocked;
-    private boolean isCredentialsExpired;
-    private boolean isEnabled;
+    private boolean isActive;
+    private boolean isExpired;
+    private boolean isLocked;
 
     @NotNull
     @Column(nullable = false)
@@ -36,13 +35,15 @@ public class User {
     public User(String password, Role role) {
         this.password = password;
         this.role = role;
-        isAccountExpired = isAccountLocked = isCredentialsExpired =  false;
-        isEnabled = true;
+        this.isActive = true;
+        this.isExpired = false;
+        this.isLocked =  false;
     }
 
     public enum Role {
         ADMINISTRATOR,
-        STAFF,
+        ACADEMIC_STAFF,
+        NON_ACADEMIC_STAFF,
         LECTURER,
         STUDENT
     }

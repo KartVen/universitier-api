@@ -3,7 +3,6 @@ package pl.kartven.universitier.infrastructure.auth.api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.kartven.universitier.application.usecase.auth.ChangePasswordUseCase;
 import pl.kartven.universitier.application.usecase.auth.LoginUseCase;
@@ -37,19 +36,7 @@ public class AuthController implements RestErrorHandler {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> register(@RequestBody ChangePasswordRequest request) {
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
         return passwordUseCase.execute(request).fold(this::handleError, ResponseEntity::ok);
-    }
-
-
-    @GetMapping("/secure")
-    @PreAuthorize("isAuthenticated")
-    public String secureEndpoint() {
-        return "This is a authenticated endpoint.";
-    }
-
-    @GetMapping("/public")
-    public String publicEndpoint() {
-        return "This is a public endpoint.";
     }
 }

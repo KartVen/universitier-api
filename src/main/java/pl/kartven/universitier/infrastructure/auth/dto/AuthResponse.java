@@ -5,5 +5,5 @@ import lombok.Value;
 @Value
 public class AuthResponse {
     String id;
-    String bearer;
+    String token;
 }

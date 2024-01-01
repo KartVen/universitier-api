@@ -28,7 +28,11 @@ public class Programme {
     @NotBlank
     @NotNull
     @Column(nullable = false)
-    private String shortname;
+    private String shortName;
+
+    @NotNull
+    @Column(nullable = false)
+    private Boolean isActive;
 
     @ManyToOne
     @NotNull

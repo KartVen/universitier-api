@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface ModuleRepository extends JpaRepository<Module, Long>, JpaSpecificationExecutor<Module> {
+public interface ModuleRepository extends JpaRepository<Module, Long> {
     @Query("SELECT m FROM Module m INNER JOIN FETCH m.programme LEFT JOIN FETCH m.connections WHERE m.id = :id")
     Optional<Module> findByIdWithPAndCN(Long id);
 

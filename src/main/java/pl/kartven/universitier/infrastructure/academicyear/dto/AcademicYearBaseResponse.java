@@ -5,6 +5,6 @@ import lombok.Value;
 @Value
 public class AcademicYearBaseResponse {
     Long id;
-    Integer semesters;
-    String range;
+    String mark;
+    Boolean isClosed;
 }

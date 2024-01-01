@@ -44,12 +44,14 @@ public class FacultyCreateUpdateUseCase implements IFacultyCreateUpdateUseCase {
     public interface FacultyMapper {
         @Mapping(target = "id", ignore = true)
         @Mapping(target = "courses", ignore = true)
-        @Mapping(target = "shortname", source = "shortName")
+        @Mapping(target = "addressStreet", source = "address.street")
+        @Mapping(target = "addressZipCode", source = "address.zipCode")
+        @Mapping(target = "addressCity", source = "address.city")
         Faculty map(FacultyAddEditRequest request);
 
         default Faculty update(Faculty entity, FacultyAddEditRequest request){
             entity.setName(request.getName());
-            entity.setShortname(request.getShortName());
+            entity.setShortName(request.getShortName());
             entity.setYearFounded(request.getYearFounded());
             return entity;
         }

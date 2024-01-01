@@ -5,10 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,27 +24,38 @@ public class Module {
     @Column(nullable = false)
     private String name;
 
+    @NotBlank
+    @NotNull
+    @Size(max = 10)
+    @Column(nullable = false)
+    private String shortName;
+
     @NotNull
     @Column(nullable = false)
     @Min(0)
     @Max(12)
-    Integer ects;
+    private Integer ects;
 
     @NotNull
     @Column(nullable = false)
     @Min(0)
-    @Max(72)
-    Integer hours;
+    private Integer hours;
 
     @NotNull
     @Column(nullable = false)
-    Boolean isExam;
+    private Boolean isExam;
+
+    @NotNull
+    @Column(nullable = false)
+    private Boolean isActive;
 
     @ManyToOne
     @NotNull
     @JoinColumn(name = "programme_id", nullable = false)
     private Programme programme;
 
-    @OneToMany(mappedBy = "module", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "module", cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST,
+    })
     private Set<Connection> connections = new HashSet<>();
 }

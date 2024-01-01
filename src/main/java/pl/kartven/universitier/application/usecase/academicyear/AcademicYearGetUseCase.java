@@ -40,7 +40,6 @@ public class AcademicYearGetUseCase implements IAcademicYearGetUseCase {
 
     private Page<AcademicYear> executeInRepo(FilterParams filterParams, PageRequest pageRequest) {
         return repository.findAllByCriteria(
-                Try.of(() -> Integer.parseInt(filterParams.getPhrase())).getOrNull(),
                 filterParams.getPhrase(),
                 pageRequest
         );

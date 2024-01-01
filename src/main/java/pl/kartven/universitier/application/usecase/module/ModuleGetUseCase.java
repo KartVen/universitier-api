@@ -14,22 +14,24 @@ import pl.kartven.universitier.application.exception.ApiException;
 import pl.kartven.universitier.application.exception.ResourceNotFoundException;
 import pl.kartven.universitier.application.exception.ServerProcessingException;
 import pl.kartven.universitier.application.util.FilterParams;
-import pl.kartven.universitier.domain.model.Faculty;
 import pl.kartven.universitier.domain.model.Module;
+import pl.kartven.universitier.domain.model.Programme;
+import pl.kartven.universitier.domain.repository.AcademicYearRepository;
 import pl.kartven.universitier.domain.repository.ModuleRepository;
-import pl.kartven.universitier.infrastructure.academicyear.dto.AcademicYearBaseResponse;
-import pl.kartven.universitier.infrastructure.faculty.dto.FacultyBaseResponse;
 import pl.kartven.universitier.infrastructure.module.dto.ModuleBaseResponse;
 import pl.kartven.universitier.infrastructure.module.dto.ModuleForPageResponse;
 import pl.kartven.universitier.infrastructure.module.dto.ModuleViewResponse;
 
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 @AllArgsConstructor
 @Component
 public class ModuleGetUseCase implements IModuleGetUseCase {
     private final ModuleRepository repository;
     private final ModuleMapper mapper;
+    private final AcademicYearRepository academicYearRepository;
 
     @Override
     public Either<ApiException, Page<ModuleForPageResponse>> execute(
@@ -53,7 +55,7 @@ public class ModuleGetUseCase implements IModuleGetUseCase {
     }
 
     private List<ModuleForPageResponse> mapToModuleForPage(Page<Module> pages) {
-        return pages.stream().map(mapper::mapToForPage).toList();
+        return pages.stream().map(programme -> mapper.mapToForPage(programme, academicYearRepository::findAllMarkByModuleId)).toList();
     }
 
     @Override
@@ -73,10 +75,18 @@ public class ModuleGetUseCase implements IModuleGetUseCase {
 
     @Mapper(componentModel = "spring")
     public interface ModuleMapper {
-        @Mapping(target = "programmeName", source = "programme.name")
-        ModuleForPageResponse mapToForPage(Module programme);
+        default ModuleForPageResponse mapToForPage(Module programme, Function<Long, Set<String>> findAllMarkByModuleId){
+            return new ModuleForPageResponse(
+                    programme.getId(),
+                    programme.getName(),
+                    programme.getEcts(),
+                    programme.getIsExam(),
+                    programme.getName(),
+                    findAllMarkByModuleId.apply(programme.getId())
+            );
+        }
 
-        ModuleViewResponse mapToView(Module programme);
+        ModuleViewResponse mapToView(Module module);
 
         List<ModuleBaseResponse> mapToListBase(List<Module> faculties);
     }

@@ -34,8 +34,8 @@ public class Connection {
 
     public Connection(Module module, AcademicYear academicYear, Group group) {
         this.module = module;
-        this.group = group;
         this.academicYear = academicYear;
+        this.group = group;
     }
 }
 

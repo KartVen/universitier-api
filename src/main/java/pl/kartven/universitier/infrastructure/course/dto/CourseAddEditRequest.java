@@ -8,5 +8,5 @@ import java.util.Set;
 public class CourseAddEditRequest {
     private final String name;
     private final Long facultyId;
-    private final Set<Long> academicYearsIds;
+    private final Boolean isActive;
 }

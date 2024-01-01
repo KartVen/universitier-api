@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 
-public interface ProgrammeRepository extends JpaRepository<Programme, Long>, JpaSpecificationExecutor<Programme> {
+public interface ProgrammeRepository extends JpaRepository<Programme, Long> {
     @Query("SELECT p FROM Programme p " +
             "INNER JOIN FETCH p.course " +
             "LEFT JOIN FETCH p.modules " +
@@ -22,11 +22,12 @@ public interface ProgrammeRepository extends JpaRepository<Programme, Long>, Jpa
             value = "SELECT p FROM Programme p " +
                     "INNER JOIN FETCH p.course c WHERE " +
                     "(:name IS NULL OR p.name = :name) OR " +
-                    "(:shortName IS NULL OR p.shortname = :shortName) OR " +
+                    "(:shortName IS NULL OR p.shortName = :shortName) OR " +
                     "(:courseName IS NULL OR c.name = :courseName)",
             countQuery = "SELECT COUNT(p) FROM Programme p " +
                     "INNER JOIN p.course c WHERE " +
                     "(:name IS NULL OR p.name = :name) OR " +
+                    "(:shortName IS NULL OR p.shortName = :shortName) OR " +
                     "(:courseName IS NULL OR c.name = :courseName)"
     )
     Page<Programme> findAllByCriteria(

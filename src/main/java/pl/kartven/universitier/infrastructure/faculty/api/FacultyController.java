@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.kartven.universitier.application.exception.ApiError;
 import pl.kartven.universitier.application.usecase.faculty.IFacultyCreateUpdateUseCase;
@@ -65,6 +66,7 @@ public class FacultyController implements RestErrorHandler {
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema()))
     @PredefinedApiResponse.BadRequest
     @PredefinedApiResponse.Created
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody FacultyAddEditRequest request) {
         return createUpdateUseCase.execute(request)
@@ -74,6 +76,7 @@ public class FacultyController implements RestErrorHandler {
     @PredefinedApiResponse.NoContent
     @PredefinedApiResponse.NotFound
     @PredefinedApiResponse.BadRequest
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
@@ -95,6 +98,7 @@ public class FacultyController implements RestErrorHandler {
 
     @PredefinedApiResponse.NotFound
     @PredefinedApiResponse.NoContent
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         return deleteUseCase.execute(id)

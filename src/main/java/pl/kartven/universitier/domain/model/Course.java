@@ -25,6 +25,10 @@ public class Course {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @NotNull
+    @Column(nullable = false)
+    private Boolean isActive;
+
     @ManyToOne
     @NotNull
     @JoinColumn(name = "faculty_id", nullable = false)

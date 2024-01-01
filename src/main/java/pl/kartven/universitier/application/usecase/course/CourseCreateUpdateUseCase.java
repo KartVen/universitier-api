@@ -33,12 +33,9 @@ public class CourseCreateUpdateUseCase implements ICourseCreateUpdateUseCase {
         var faculty = Option.ofOptional(facultyRepository.findById(request.getFacultyId()))
                 .toEither((ApiException) new ResourceNotFoundException("Faculty not found: " + request.getFacultyId()));
         if (faculty.isLeft()) return Either.left(faculty.getLeft());
-        var academicYears = fetchAcademicYears(request.getAcademicYearsIds());
-        if (academicYears.isLeft()) return Either.left(academicYears.getLeft());
 
         var course = mapper.map(request);
         course.setFaculty(faculty.get());
-        //course.getAcademicYears().addAll(academicYears.get());
 
         return Try.of(() -> repository.save(course))
                 .toEither()
@@ -50,7 +47,7 @@ public class CourseCreateUpdateUseCase implements ICourseCreateUpdateUseCase {
     public Either<ApiException, Void> execute(Long id, CourseAddEditRequest request) {
         return Option.ofOptional(repository.findByIdWithFAndCN(id))
                 .toEither((ApiException) new ResourceNotFoundException("Course not found: " + id))
-                .map(entity -> mapper.update(entity, request, fetchAcademicYears(request.getAcademicYearsIds()).get()))
+                .map(entity -> mapper.update(entity, request))
                 .flatMap(entity -> Try.of(() -> repository.save(entity))
                         .toEither()
                         .mapLeft(e -> new ServerProcessingException(e.getMessage())))
@@ -70,8 +67,9 @@ public class CourseCreateUpdateUseCase implements ICourseCreateUpdateUseCase {
         @Mapping(target = "programmes", ignore = true)
         Course map(CourseAddEditRequest request);
 
-        default Course update(Course entity, CourseAddEditRequest request, Set<AcademicYear> academicYears) {
+        default Course update(Course entity, CourseAddEditRequest request) {
             entity.setName(request.getName());
+            entity.setIsActive(request.getIsActive());
             return entity;
         }
     }

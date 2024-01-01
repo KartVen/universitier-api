@@ -8,4 +8,8 @@ logging.level:
   org.springframework.security: DEBUG
 
 app:
+  init: MORE
   cors: "http://localhost:4200"
+  jwt:
+    expiration-seconds: 3600
+

@@ -28,14 +28,30 @@ public class Faculty {
     @NotBlank
     @NotNull
     @Column(nullable = false)
-    private String shortname;
+    private String shortName;
 
+    @NotNull
+    @Column(nullable = false)
     private Integer yearFounded;
 
     @NotBlank
     @NotNull
     @Column(nullable = false)
-    private String address;
+    protected String addressStreet;
+
+    @NotBlank
+    @NotNull
+    @Column(nullable = false)
+    protected String addressZipCode;
+
+    @NotBlank
+    @NotNull
+    @Column(nullable = false)
+    protected String addressCity;
+
+    @NotNull
+    @Column(nullable = false)
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "faculty")
     private Set<Course> courses = new HashSet<>();

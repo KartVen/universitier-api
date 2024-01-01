@@ -7,4 +7,5 @@ public class ProgrammeAddEditRequest {
     private final String name;
     private final String shortName;
     private final Long courseId;
+    private final Boolean isActive;
 }

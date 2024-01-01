@@ -9,17 +9,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.kartven.universitier.application.usecase.course.ICourseCreateUpdateUseCase;
 import pl.kartven.universitier.application.usecase.course.ICourseDeleteUseCase;
 import pl.kartven.universitier.application.usecase.course.ICourseGetUseCase;
-import pl.kartven.universitier.application.usecase.group.IGroupGetUseCase;
 import pl.kartven.universitier.application.util.FilterParams;
 import pl.kartven.universitier.application.util.PredefinedApiResponse;
 import pl.kartven.universitier.application.util.RestErrorHandler;
-import pl.kartven.universitier.infrastructure.connection.dto.ConnectionViewResponse;
 import pl.kartven.universitier.infrastructure.course.dto.CourseAddEditRequest;
 import pl.kartven.universitier.infrastructure.course.dto.CourseBaseResponse;
+import pl.kartven.universitier.infrastructure.course.dto.CourseViewResponse;
 
 import java.net.URI;
 import java.util.Objects;
@@ -52,7 +52,7 @@ public class CourseController implements RestErrorHandler {
     }
 
     @ApiResponse(responseCode = "200", description = "OK",
-            content = @Content(schema = @Schema(implementation = ConnectionViewResponse.class)))
+            content = @Content(schema = @Schema(implementation = CourseViewResponse.class)))
     @PredefinedApiResponse.NotFound
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Long id) {
@@ -63,6 +63,7 @@ public class CourseController implements RestErrorHandler {
     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema()))
     @PredefinedApiResponse.BadRequest
     @PredefinedApiResponse.Created
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CourseAddEditRequest request) {
         return createUpdateUseCase.execute(request)
@@ -72,6 +73,7 @@ public class CourseController implements RestErrorHandler {
     @PredefinedApiResponse.NoContent
     @PredefinedApiResponse.NotFound
     @PredefinedApiResponse.BadRequest
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(
             @PathVariable Long id,
@@ -94,6 +96,7 @@ public class CourseController implements RestErrorHandler {
 
     @PredefinedApiResponse.NotFound
     @PredefinedApiResponse.NoContent
+    @PreAuthorize("isAuthenticated() && hasRole('ADMINISTRATOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         return deleteUseCase.execute(id)

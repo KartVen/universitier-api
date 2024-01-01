@@ -1,12 +1,10 @@
 package pl.kartven.universitier.domain.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,29 +23,32 @@ public class Staff extends Person {
 
     @NotBlank
     @NotNull
-    @Column(nullable = false, unique = true)
     @Size(max = 20)
-    private String referenceId;
+    @Column(nullable = false, unique = true)
+    private String keyId;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
+    @ManyToMany(cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST
+    })
     @JoinTable(name = "staff_connections",
             joinColumns = @JoinColumn(name = "staff_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "connection_id", nullable = false)
     )
     private Set<Connection> connections = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST
+    })
     @JoinColumn(name = "staff_id", nullable = false)
     private Set<Work> works = new HashSet<>();
 
-    public Staff(String referenceId, String firstName, String lastName, User user) {
-        this.referenceId = referenceId;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Staff(String firstName, String lastName, String addressStreet, String addressHome, String addressZipCode, String addressCity, String email, String phone, String keyId, User user) {
+        super(firstName, lastName, addressStreet, addressHome, addressZipCode, addressCity, email, phone);
+        this.keyId = keyId;
         this.user = user;
     }
 }

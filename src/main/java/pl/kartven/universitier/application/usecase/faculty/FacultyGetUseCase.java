@@ -66,15 +66,12 @@ public class FacultyGetUseCase implements IFacultyGetUseCase {
 
     @Mapper(componentModel = "spring")
     public interface FacultyMapper {
-        @Mapping(target = "shortName", source = "shortname")
         FacultyForPageResponse mapToForPage(Faculty faculty);
 
-        @Mapping(target = "shortName", source = "shortname")
         FacultyViewResponse mapToView(Faculty faculty);
 
         List<FacultyBaseResponse> mapToListBase(List<Faculty> faculties);
 
-        @Mapping(target = "shortName", source = "shortname")
         FacultyBaseResponse mapToBase(Faculty faculty);
     }
 }

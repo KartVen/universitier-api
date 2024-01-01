@@ -54,12 +54,11 @@ public class ProgrammeCreateUpdateUseCase implements IProgrammeCreateUpdateUseCa
         @Mapping(target = "id", ignore = true)
         @Mapping(target = "course", ignore = true)
         @Mapping(target = "modules", ignore = true)
-        @Mapping(target = "shortname", source = "shortName")
         Programme map(ProgrammeAddEditRequest request);
 
         default Programme update(Programme entity, ProgrammeAddEditRequest request) {
             entity.setName(request.getName());
-            entity.setShortname(request.getShortName());
+            entity.setShortName(request.getShortName());
             return entity;
         }
     }

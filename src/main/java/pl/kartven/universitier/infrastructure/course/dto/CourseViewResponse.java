@@ -8,19 +8,19 @@ import java.util.Set;
 public class CourseViewResponse {
     Long id;
     String name;
-    Faculty faculty;
-    Set<Programme> programmes;
+    FacultyDto faculty;
+    Set<ProgrammeDto> programmes;
 
     @Value
-    public static class Faculty {
+    public static class FacultyDto {
         Long id;
         String name;
     }
 
     @Value
-    public static class Programme {
+    public static class ProgrammeDto {
         Long id;
         String name;
-        String shortname;
+        String shortName;
     }
 }

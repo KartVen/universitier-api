@@ -21,12 +21,12 @@ public class Group {
 
     @NotNull
     @Column(nullable = false)
-    private Integer number;
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     @NotNull
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Type type;
+    private Integer number;
 
     @OneToMany(mappedBy = "group")
     private Set<Connection> connections = new HashSet<>();
@@ -36,6 +36,8 @@ public class Group {
         C,
         L,
         P,
-        LEK;
+        LEK,
+        EX,
+        OTH
     }
 }

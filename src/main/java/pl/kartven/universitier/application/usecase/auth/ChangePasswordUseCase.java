@@ -30,7 +30,7 @@ public class ChangePasswordUseCase {
     private JwtTool jwtTool;
     private final PasswordEncoder passwordEncoder;
 
-    public Either<ApiException, AuthResponse> execute(ChangePasswordRequest request) {
+    public Either<ApiException, Void> execute(ChangePasswordRequest request) {
         return Try.of(() -> authenticate(request))
                 .toEither()
                 .mapLeft(ex -> Match(ex).<ApiException>of(
@@ -45,11 +45,7 @@ public class ChangePasswordUseCase {
                             return user;
                         })
                         .map(userRepository::save)
-                        .map(user -> userPrincipal))
-                .map(userPrincipal -> {
-                    var jwt = jwtTool.generateToken(JwtHelper.map(userPrincipal));
-                    return new AuthResponse(userPrincipal.getId().toString(), jwt.bearer());
-                });
+                        .map(user -> null));
     }
 
     private UserPrincipal authenticate(ChangePasswordRequest request) throws RuntimeException {

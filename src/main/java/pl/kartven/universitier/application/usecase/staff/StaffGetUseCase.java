@@ -61,10 +61,10 @@ public class StaffGetUseCase implements IStaffGetUseCase {
     public interface StaffMapper {
 
         @Mapping(target = "coursesCount", constant = "0")
-        @Mapping(target = "isActive", source = "user.enabled")
+        @Mapping(target = "isActive", source = "user.active")
         StaffForPageResponse mapToForPage(Staff student);
 
-        @Mapping(target = "isActive", source = "user.enabled")
+        @Mapping(target = "isActive", source = "user.active")
         @Mapping(target = "email", source = "student", qualifiedByName = "mapEmail")
         @Mapping(target = "id", source = "id")
         @Mapping(target = "courses", expression = "java(new java.util.HashSet<>())")
@@ -90,7 +90,7 @@ public class StaffGetUseCase implements IStaffGetUseCase {
                                 .toList();
                         var viewGroups = filteredConnections.stream()
                                 .map(Connection::getGroup)
-                                .map(group -> new StaffViewResponse.Course.Programme.Module.Group(
+                                .map(group -> new StaffViewResponse.CourseDto.ProgrammeDto.ModuleDto.GroupDto(
                                         group.getId(), group.getType(), group.getNumber()
                                 ))
                                 .collect(Collectors.toSet());
@@ -98,16 +98,16 @@ public class StaffGetUseCase implements IStaffGetUseCase {
                                 .filter(con -> con.getModule().getId().equals(module.getId()))
                                 .map(Connection::getAcademicYear)
                                 .findFirst()
-                                .map(academicYear -> new StaffViewResponse.Course.Programme.Module.AcademicYear(
-                                        academicYear.getId(), academicYear.getRange()
+                                .map(academicYear -> new StaffViewResponse.CourseDto.ProgrammeDto.ModuleDto.AcademicYearDto(
+                                        academicYear.getId(), academicYear.getMark()
                                 ));
-                        return new StaffViewResponse.Course.Programme.Module(
+                        return new StaffViewResponse.CourseDto.ProgrammeDto.ModuleDto(
                                 module.getId(), module.getName(), viewAcaYear.orElse(null), viewGroups
                         );
                     }).collect(Collectors.toSet());
-                    return new StaffViewResponse.Course.Programme(programme.getId(), programme.getName(), viewModules);
+                    return new StaffViewResponse.CourseDto.ProgrammeDto(programme.getId(), programme.getName(), viewModules);
                 }).findFirst();
-                return new StaffViewResponse.Course(course.getId(), course.getName(), viewProgramme.orElse(null));
+                return new StaffViewResponse.CourseDto(course.getId(), course.getName(), viewProgramme.orElse(null));
             }).collect(Collectors.toSet());
             view.getCourses().addAll(viewCourses);
             return view;

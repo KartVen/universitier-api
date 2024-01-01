@@ -61,10 +61,8 @@ public class ProgrammeGetUseCase implements IProgrammeGetUseCase {
     public interface ProgrammeMapper {
 
         @Mapping(target = "courseName", source = "course.name")
-        @Mapping(target = "shortName", source = "shortname")
         ProgrammeForPageResponse mapToForPage(Programme programme);
 
-        @Mapping(target = "shortName", source = "shortname")
         ProgrammeViewResponse mapToView(Programme programme);
     }
 }

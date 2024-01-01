@@ -35,10 +35,10 @@ public class UserPrincipal implements UserDetails {
                 .username(username)
                 .password(user.getPassword())
                 .authorities(List.of(new SimpleGrantedAuthority(user.getRole().toString())))
-                .isAccountNonExpired(!user.isAccountExpired())
-                .isAccountNonLocked(!user.isAccountLocked())
-                .isCredentialsNonExpired(!user.isCredentialsExpired())
-                .isEnabled(user.isEnabled())
+                .isEnabled(user.isActive())
+                .isAccountNonExpired(!user.isExpired())
+                .isAccountNonLocked(!user.isLocked())
+                .isCredentialsNonExpired(user.isActive() && !user.isExpired() && !user.isLocked())
                 .build();
     }
 }

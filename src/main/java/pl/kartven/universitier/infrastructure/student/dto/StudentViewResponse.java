@@ -12,37 +12,37 @@ public class StudentViewResponse {
     String lastName;
     String email;
     Boolean isActive;
-    Set<Course> courses;
+    Set<CourseDto> courses;
 
     @Value
-    public static class Course {
+    public static class CourseDto {
         Long id;
         String name;
-        Programme programme;
+        ProgrammeDto programme;
 
         @Value
-        public static class Programme {
+        public static class ProgrammeDto {
             Long id;
             String name;
-            Set<Module> modules;
+            Set<ModuleDto> modules;
 
             @Value
-            public static class Module {
+            public static class ModuleDto {
                 Long id;
                 String name;
-                AcademicYear academicYear;
-                Set<Group> groups;
+                AcademicYearDto academicYear;
+                Set<GroupDto> groups;
 
                 @Value
-                public static class AcademicYear {
+                public static class AcademicYearDto {
                     Long id;
                     String range;
                 }
 
                 @Value
-                public static class Group {
+                public static class GroupDto {
                     Long id;
-                    pl.kartven.universitier.domain.model.Group.Type type;
+                    Group.Type type;
                     Integer number;
                 }
             }

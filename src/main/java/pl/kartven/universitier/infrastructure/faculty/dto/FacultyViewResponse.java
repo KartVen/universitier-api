@@ -9,12 +9,15 @@ public class FacultyViewResponse {
     Long id;
     String name;
     String shortName;
+    String addressStreet;
+    String addressZipCode;
+    String addressCity;
     Integer yearFounded;
-    String address;
-    Set<Course> courses;
+    Boolean isActive;
+    Set<CourseDto> courses;
 
     @Value
-    public static class Course {
+    public static class CourseDto {
         Long id;
         String name;
     }

@@ -9,22 +9,19 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
             </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="password" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_account_expired" type="BOOLEAN">
+            <column name="is_active" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_account_locked" type="BOOLEAN">
+            <column name="is_expired" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_credentials_expired" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="is_enabled" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="role" type="VARCHAR(255)">
+            <column name="is_locked" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -33,7 +30,7 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_staffs"/>
             </column>
-            <column name="reference_id" type="VARCHAR(20)">
+            <column name="key_id" type="VARCHAR(20)">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="first_name" type="VARCHAR(255)">
@@ -45,13 +42,19 @@
             <column name="address_street" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="address_home" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="address_zip_code" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="address_city" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="address_post_dist" type="VARCHAR(255)">
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="BIGINT">
@@ -59,8 +62,8 @@
             </column>
         </createTable>
 
-        <createIndex indexName="idx_reference_id" tableName="staffs">
-            <column name="reference_id"/>
+        <createIndex indexName="idx_key_id" tableName="staffs">
+            <column name="key_id"/>
         </createIndex>
 
         <createTable tableName="students">
@@ -76,13 +79,19 @@
             <column name="address_street" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="address_home" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="address_zip_code" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="address_city" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="address_post_dist" type="VARCHAR(255)">
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="BIGINT">
@@ -97,12 +106,42 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="shortname" type="VARCHAR(255)">
+            <column name="short_name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="year_founded" type="INT"/>
-            <column name="address" type="VARCHAR(255)">
+            <column name="address_street" type="VARCHAR(255)">
                 <constraints nullable="false"/>
+            </column>
+            <column name="address_zip_code" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_city" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="works">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_works"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="staff_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_works_staff" references="staffs(id)"/>
+            </column>
+            <column name="faculty_id" type="BIGINT">
+                <constraints nullable="true" primaryKey="true" foreignKeyName="fk_works_faculty" references="faculties(id)"/>
             </column>
         </createTable>
 
@@ -111,6 +150,9 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_courses"/>
             </column>
             <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="faculty_id" type="BIGINT">
@@ -125,7 +167,10 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="shortname" type="VARCHAR(255)">
+            <column name="short_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="course_id" type="BIGINT">
@@ -140,6 +185,9 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="short_name" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
             <column name="ects" type="INT">
                 <constraints nullable="false"/>
             </column>
@@ -147,6 +195,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="is_exam" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="programme_id" type="BIGINT">
@@ -158,10 +209,10 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_academic_years"/>
             </column>
-            <column name="semesters" type="INT">
+            <column name="mark" type="VARCHAR(9)">
                 <constraints nullable="false"/>
             </column>
-            <column name="range" type="VARCHAR(9)">
+            <column name="is_closed" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -170,10 +221,10 @@
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_groups"/>
             </column>
-            <column name="number" type="INT">
+            <column name="type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="type" type="VARCHAR(255)">
+            <column name="number" type="INT">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -210,140 +261,96 @@
                 <constraints nullable="false" primaryKey="true" foreignKeyName="fk_stucon_connection" references="connections(id)"/>
             </column>
         </createTable>
-        <createTable tableName="works">
-            <column name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_works"/>
-            </column>
-            <column name="position" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="staff_id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" foreignKeyName="fk_works_staff" references="staffs(id)"/>
-            </column>
-        </createTable>
     </changeSet>
 
     <changeSet id="0001-2" author="KartVen" context="test">
-        <!--<sql>
-            insert into users (password, is_account_expired, is_account_locked, is_credentials_expired, is_enabled, role)
-            values  ('$2a$10$MEZyKrAQ7CB6RGhmOyBnw.TB5z/Ev2Z2GBw7uDGxOldYgQxgBHZSW', false, false, false, true, 'ADMINISTRATOR'),
-                    ('$2a$10$TCNuJakmKcn02uebpoplDOrCAolFRQnCWoCXsj7wYDzA5TkcyH3GC', false, false, false, true, 'LECTURER'),
-                    ('$2a$10$GhpXBbwYCJ0h5eZCVvPIBeT9D4Oybej5PT0587F.7HryOhkTwYVLi', false, false, false, true, 'LECTURER'),
-                    ('$2a$10$32s2c/EnoBkScqhrrJbeOOo6TiyWevGG1KmXJLbsgLsAWGj513yMS', false, false, false, true, 'STUDENT'),
-                    ('$2a$10$gzuXPaJ2UMuvICaHTDVu3u6ljaUCaJDnwf3C741rwE9ZEy91pEIRy', false, false, false, true, 'STUDENT'),
-                    ('$2a$10$vOvXeMOUMF.ff/qyvbBxSO2aqBOyFOVJTGmLH/6TmLVlOg9Y80.Uy', false, false, false, true, 'STUDENT');
+        <sql>
+            insert into faculties (name, short_name, year_founded, address_street, address_zip_code, address_city, is_active)
+            values  ('Wydział Elektrotechniki i Informatyki', 'WEII', 1963, 'ul. Wincentego Pola 2', '35-959', 'Rzeszów', true);
         </sql>
 
         <sql>
-            insert into staffs (id, first_name, last_name, user_id)
-            values  ('kkielbasa', 'Krystian', 'Kiełbasa', 1),
-                    ('jnowak', 'Jan', 'Nowak', 2),
-                    ('anowak', 'Anna', 'Nowak', 3);
-
+            insert into courses (name, is_active, faculty_id)
+            values  ('Informatyka', true, 1);
         </sql>
 
         <sql>
-            insert into students (first_name, last_name, user_id)
-            values  ('Kuba', 'Kowalski', 4),
-                    ('Piotr', 'Kowalski', 5),
-                    ('Filip', 'Kowalski', 6);
+            insert into programmes (name, short_name, is_active, course_id)
+            values  ('Inżynieria systemów informatycznych', 'AA', true, 1),
+                    ('Systemy i sieci komputerowe', 'S', true, 1),
+                    ('Informatyka w przedsiębiorstwie', 'TT', true, 1);
         </sql>
 
         <sql>
-            insert into faculties (address, name, shortname)
-            values ('al. Powstańców Warszawy 8, 35 - 959 Rzeszów', 'Wydział Budowy Maszyn i Lotnictwa', 'WBMIL'),
-                   ('al. Powstańców Warszawy 6, 35-959 Rzeszów', 'Wydział Chemiczny', 'CHEMIA'),
-                   ('ul. Wincentego Pola 2, 35-959 Rzeszów', 'Wydział Elektrotechniki i Informatyki', 'WEII'),
-                   ('al. Powstańców Warszawy 8, 35-959 Rzeszów', 'Wydział Matematyki i Fizyki Stosowanej', 'WMIFS'),
-                   ('al. Powstańców Warszawy 10, 35-959 Rzeszów', 'Wydział Zarządzania', 'WZ');
+            insert into modules (name, short_name, ects, hours, is_exam, is_active, programme_id)
+            values  ('Programowanie w języku C', 'ProC', 4, 45, true, true, 1),
+                    ('Wstęp do programowania', 'Wdp', 4, 45, true, true, 1),
+                    ('Narzędzia dla programistów', 'Ndp', 3, 40, true, true, 1);
         </sql>
 
         <sql>
-            insert into courses (name, faculty_id)
-            values ('Automatyka i robotyka', 3),
-                   ('Elektronika i telekomunikacja', 3),
-                   ('Elektrotechnika', 3),
-                   ('Informatyka', 3),
-                   ('Elektromobilność', 3);
+            insert into academic_years (mark, is_closed)
+            values  ('2020/2021', false),
+                    ('2023/2024', false);
         </sql>
 
         <sql>
-            insert into academic_years (semesters, range)
-            values  (7, '2020/2021'),
-                    (7, '2021/2022'),
-                    (7, '2022/2023'),
-                    (7, '2023/2024');
-        </sql>
-
-        <sql>
-            insert into programmes (name, shortname, course_id)
-            values  ('Inżynieria systemów informatycznych', 'AA', 4),
-                    ('Systemy i sieci komputerowe', 'S', 4),
-                    ('Informatyka w przedsiębiorstwie', 'TT', 4),
-                    ('Inżynieria systemów złożonych', 'Z', 4);
-        </sql>
-
-        <sql>
-            insert into modules (name, ects, hours, is_exam, programme_id)
-            values  ('Fizyka', 6, 75, true, 1),
-                    ('Programowanie w języku C', 4, 45, false, 1),
-                    ('Sygnały i systemy', 5, 60, true, 1),
-                    ('Wstęp do programowania', 4, 45, false, 1),
-                    ('Języki, automaty i obliczenia', 5, 55, true, 1),
-                    ('Logika i teoria mnogości', 2, 30, false, 1),
-                    ('Narzędzia dla programistów', 3, 40, false, 1),
-                    ('Technika informacyjno-pomiarowa', 5, 60, false, 1);
-        </sql>
-
-        <sql>
-            insert into groups (number, type)
-            values (1, 'W'),
-                   (1, 'C'),
-                   (2, 'C'),
-                   (1, 'L'),
-                   (2, 'L'),
-                   (3, 'L'),
-                   (4, 'L'),
-                   (1, 'P'),
-                   (2, 'P'),
-                   (3, 'P'),
-                   (4, 'P');
+            insert into groups (type, number)
+            values  ('W', 1),
+                    ('C', 1),
+                    ('L', 1),
+                    ('L', 2);
         </sql>
 
         <sql>
             insert into connections (module_id, academic_year_id, group_id)
             values  (1, 1, 1),
                     (1, 1, 2),
+                    (1, 1, 3),
                     (1, 1, 4),
-                    (1, 1, 8),
                     (2, 1, 1),
                     (2, 1, 2),
+                    (2, 1, 3),
                     (2, 1, 4),
-                    (2, 1, 8),
+                    (2, 2, 1),
+                    (2, 2, 2),
+                    (2, 2, 3),
                     (3, 2, 1),
                     (3, 2, 2),
-                    (3, 2, 4),
-                    (3, 2, 8),
-                    (4, 2, 1),
-                    (4, 2, 2),
-                    (4, 2, 4),
-                    (4, 2, 8),
-                    (5, 3, 1),
-                    (5, 3, 2),
-                    (5, 3, 4),
-                    (5, 3, 8),
-                    (6, 3, 1),
-                    (6, 3, 2),
-                    (6, 3, 4),
-                    (6, 3, 8),
-                    (7, 4, 1),
-                    (7, 4, 2),
-                    (7, 4, 4),
-                    (7, 4, 8),
-                    (8, 4, 1),
-                    (8, 4, 2),
-                    (8, 4, 4),
-                    (8, 4, 8);
-        </sql>-->
+                    (3, 2, 3),
+                    (2, 2, 1),
+                    (2, 2, 3),
+                    (2, 1, 2),
+                    (2, 2, 2),
+                    (2, 1, 1);
+        </sql>
+
+        <sql>
+            insert into users (role, password, is_active, is_expired, is_locked)
+            values  ('ADMINISTRATOR', '$2a$10$6UDVFisNIAbLkz2eQp7khOm6j3keFZWfO4oXnEb03a0p13iwhwReW', true, false, false),
+                    ('ACADEMIC_STAFF', '$2a$10$fGnBSmQM0RUGICkPfCsiV.uDNuv3HHJ58u.OecpPrpNXZQ.yVddoi', true, false, false),
+                    ('LECTURER', '$2a$10$G1QCxg4D7H6TD/g8Tx2SjuBa/Dv/K/cd5l1kGPSzD19ZVcG8Es8GG', true, false, false);
+        </sql>
+
+        <sql>
+            insert into staffs (key_id, first_name, last_name, address_street, address_home, address_zip_code, address_city, email, phone, user_id)
+            values  ('kkielbasa', 'Krystian', 'Kiełbasa', 'NazwaUlicy', '1', '35-084', 'Reszów', 'krystian.kiełbasa@email.pl', '123456789', 1),
+                    ('anowak', 'Andrzej', 'Nowak', 'NazwaUlicy', '1', '35-084', 'Reszów', 'anowak@email.pl', '123456789', 2),
+                    ('jnowak', 'Jan', 'Nowak', 'NazwaUlicy', '1', '35-084', 'Reszów', 'jnowak@email.pl', '123456789', 3);
+        </sql>
+
+        <sql>
+            insert into works (type, position_name, status, staff_id, faculty_id)
+            values  ('ACADEMIC', 'Dziekan', 'PROGRESS', 2, 1);
+        </sql>
+
+        <sql>
+            insert into staff_connections (staff_id, connection_id)
+            values  (3, 15),
+                    (3, 16),
+                    (3, 17),
+                    (3, 18),
+                    (3, 19);
+        </sql>
     </changeSet>
 </databaseChangeLog>

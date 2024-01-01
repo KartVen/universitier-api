@@ -11,7 +11,7 @@ import pl.kartven.universitier.domain.model.Student;
 import java.util.Optional;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
+public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT s FROM Student s " +
             "INNER JOIN FETCH s.user " +
             "WHERE s.id = :id")

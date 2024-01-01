@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecificationExecutor<Course> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c FROM Course c " +
             "INNER JOIN FETCH c.faculty " +
             "WHERE c.id = :id")
@@ -34,15 +34,15 @@ public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecif
             value = "SELECT c FROM Course c " +
                     "INNER JOIN FETCH c.faculty f WHERE " +
                     "(:name IS NULL OR c.name = :name) OR " +
-                    "(:shortname IS NULL OR f.shortname = :shortname)",
+                    "(:shortName IS NULL OR f.shortName = :shortName)",
             countQuery = "SELECT COUNT(c) FROM Course c " +
                     "INNER JOIN c.faculty f WHERE " +
                     "(:name IS NULL OR c.name = :name) OR " +
-                    "(:shortname IS NULL OR f.shortname = :shortname)"
+                    "(:shortName IS NULL OR f.shortName = :shortName)"
     )
     Page<Course> findAllByCriteria(
             String name,
-            @Param("shortname") String facultyShortName,
+            @Param("shortName") String facultyShortName,
             Pageable pageable
     );
 

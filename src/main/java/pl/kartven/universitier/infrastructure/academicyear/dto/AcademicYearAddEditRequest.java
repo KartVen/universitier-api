@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class AcademicYearAddEditRequest {
-    private final Integer semesters;
-    private final String range;
+    private final Boolean isClosed;
+    private final String mark;
 }
